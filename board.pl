@@ -1,9 +1,8 @@
-:- dynamic board/1.
+:- dynamic board/1. % permet l'assertion et le retrait de faits board/1
 
-applyIt(Board, NewBoard) :-
-    retract(board(Board)),
-    assert(board(NewBoard)).
+applyIt(Board,NewBoard):-retract(board(Board)), assert(board(NewBoard)).
 
+%%%%% Start the game!
 init :-
     retractall(board(_)),
     length(Col1,6),
