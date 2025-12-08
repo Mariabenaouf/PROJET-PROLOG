@@ -26,3 +26,24 @@ ia(Board, RandCol, ElemIndex, _):-
     firstFreeIndexColonne(Board, RandCol, ElemIndex),
     ElemIndex\==6,
     !.
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Human move */
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+% askHumanMove(+Board, -Col, -ElemIndex)
+% Demande une colonne à l'humain et vérifie qu'elle est valide.
+askHumanMove(Board, Col, ElemIndex) :-
+    repeat,
+        write('Choisissez une colonne (0-6) : '),
+        read(UserInput),
+
+        integer(UserInput),
+        UserInput >= 0, UserInput =< 6,
+
+        firstFreeIndexColonne(Board, UserInput, ElemIndex),
+        ElemIndex \== 6,  % 6 = colonne pleine
+
+    !,
+    Col = UserInput.
