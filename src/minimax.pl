@@ -2,6 +2,13 @@ module(minimax, [minimax/5]).
 :- use_module(puissance4).
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Move */
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
+move(Board,ColIndex,Player,Board2):-
+	firstFreeIndexColonne(Board, ColIndex, ElemIndex), ElemIndex\==6,
+	replaceElem(Board, ColIndex, ElemIndex, Player, Board2)
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Utility */
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -48,6 +55,10 @@ possible_moves(Board, List) :-
 minimax(Depth,Board,Player,4,0,Utility) :-
     isBoardEmpty(Board), !.
 
+minimax(Depth,Board,_,_,Utility) :- %%% If the depth limit has been reached,
+    Depth >= 4,
+    utility(Board,Utility), !.
+
 minimax(Depth,Board,Player,ColIndex,Utility) :-
  Depth2 is Depth+1,
  possible_moves(Board,List), !,		%%% get the list of possible moves
@@ -57,7 +68,7 @@ minimax(Depth,Board,Player,ColIndex,Utility) :-
 % If there are no more available moves, then the minimax value is 
 % the utility of the given board position 
  
-minimax(Depth,Board,Player,ColIndex,Utility) :- utility(Board,Utility).
+minimax(Depth,Board,Player,ColIndex,Utility) :- utility(Board,Utility). %%% no more moves available
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* best */
@@ -68,7 +79,7 @@ minimax(Depth,Board,Player,ColIndex,Utility) :- utility(Board,Utility).
 
 best(Depth,Board,Player,[ColIndex],ColIndex,Utility) 
 	:-	move(Board,ColIndex,Player,Board2),	%%% apply that move to the board,
-			inverse_mark(Player,Player2), !,
+			changePlayer(Player,Player2), !,
 			%%% then recursively search for the utility of that move.
 				minimax(Depth,Board2,Player2,_,Utility), !,	 
 				output_value(Depth,ColIndex,Utility), !.
@@ -77,7 +88,7 @@ best(Depth,Board,Player,[ColIndex],ColIndex,Utility)
 
 best(Depth,Board,Player,[ColIndex|Other_Moves],ColIndex,Utility) 
 	:-	move(Board,ColIndex,Player,Board2),	%%% apply the first move (in the list)
-			inverse_mark(Player,Player2), !,
+			changePlayer(Player,Player2), !,
 				minimax(Depth,Board2,Player2,_,Utility1),	
 			%%% recursively search for the utility value of that move
 			%%% and determine the best move of the remaining moves
