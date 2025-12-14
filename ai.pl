@@ -5,9 +5,8 @@ firstFreeIndexColonne(Board, ColIndex, Index):-
     var(Elem), !. % cherche le premier indice libre dans la colonne, s'arrête au premier trouvé
 firstFreeIndexColonne(_, _, 6):- !. % si on n'a pas trouvé d'indice libre, on renvoie 7 (colonne pleine)
 
-% Basic IA that plays randomly in a non-full column
-ia(Board, RandCol, ElemIndex, _):-
-    repeat, random(0,7,RandCol), firstFreeIndexColonne(Board, RandCol, ElemIndex), ElemIndex\==6, !.
+otherPlayer('x', 'o').
+otherPlayer('o', 'x').
 
 % Savoir si un joueur peut gagner au prochain coup en jouant dans une colonne
 gagnableColonne(Colonne, P) :- Colonne = [P,Q,R,S,_,_], P==Q, Q==R, var(S), nonvar(P).
@@ -179,3 +178,17 @@ gagnable(Board, P, ColonneAJouer) :- member(ColonneAJouer, Board), gagnableColon
 gagnable(Board, P, ColonneAJouer) :- between(0, 5, L), gagnableLigne(L, Board, P, ColonneAJouer).
 gagnable(Board, P, ColonneAJouer) :- between(3, 5, L), between(0, 3, C), gagnableDiagonaleHB(L, C, Board, P, ColonneAJouer).
 gagnable(Board, P, ColonneAJouer) :- between(0, 2, L), between(0, 3, C), gagnableDiagonaleBH(L, C, Board, P, ColonneAJouer).
+
+
+ia(Board, ColIndex, ElemIndex, Player):-
+    gagnable(Board, Player, ColIndex). % check if the AI can win in the next move
+    firstFreeIndexColonne(Board, RandCol, ElemIndex), ElemIndex\==6, !.
+
+ia(Board, ColIndex, ElemIndex, Player):-
+    changePlayer(Player, Opponent),
+    gagnable(Board, Opponent, ColIndex). % check if the AI can block in the next oponnent move
+    firstFreeIndexColonne(Board, RandCol, ElemIndex), ElemIndex\==6, !.
+
+% Basic IA that plays randomly in a non-full column
+ia(Board, RandCol, ElemIndex, _):-
+    repeat, random(0,7,RandCol), firstFreeIndexColonne(Board, RandCol, ElemIndex), ElemIndex\==6, !.
