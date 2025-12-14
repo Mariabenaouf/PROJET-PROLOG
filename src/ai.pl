@@ -9,114 +9,113 @@ otherPlayer('x', 'o').
 otherPlayer('o', 'x').
 
 % Savoir si un joueur peut gagner au prochain coup en jouant dans une colonne
-gagnableColonne(Colonne, P) :- Colonne = [P,Q,R,S,_,_], P==Q, Q==R, var(S), nonvar(P).
-gagnableColonne(Colonne, P) :- Colonne = [_,P,Q,R,S,_], P==Q, Q==R, var(S), nonvar(P).
-gagnableColonne(Colonne, P) :- Colonne = [_,_,P,Q,R,S], P==Q, Q==R, var(S), nonvar(P).
+gagnableColonne(Board, ColIndex, ColonneAJouer, P) :- nth0(ColIndex,Board,Colonne), Colonne = [P,Q,R,S,_,_], P==Q, Q==R, var(S), nonvar(P), ColonneAJouer is ColIndex.
+gagnableColonne(Board, ColIndex, ColonneAJouer, P) :- nth0(ColIndex,Board,Colonne), Colonne = [_,P,Q,R,S,_], P==Q, Q==R, var(S), nonvar(P), ColonneAJouer is ColIndex.
+gagnableColonne(Board, ColIndex, ColonneAJouer, P) :- nth0(ColIndex,Board,Colonne), Colonne = [_,_,P,Q,R,S], P==Q, Q==R, var(S), nonvar(P), ColonneAJouer is ColIndex.
 
 %Le premier élément est vide
 gagnableLigne(Ligne, Board, P, ColonneAJouer) :- 
-    nth0(0,Board,C0), firstFreeIndexColonne(Board,C0,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,0,IndexLibre), Ligne==IndexLibre,
     nth0(1,Board,C1), nth0(Ligne,C1,P), nonvar(P),
     nth0(2,Board,C2), nth0(Ligne,C2,V2), P==V2,
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
-    ColonneAJouer=C0.
+    ColonneAJouer=0.
 gagnableLigne(Ligne, Board, P, ColonneAJouer) :-
-    nth0(1,Board,C1), firstFreeIndexColonne(Board,C1,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,1,IndexLibre), Ligne==IndexLibre,
     nth0(2,Board,C2), nth0(Ligne,C2,P), nonvar(P),
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
-    ColonneAJouer=C1.
+    ColonneAJouer=1.
 gagnableLigne(Ligne, Board, P, ColonneAJouer) :- 
-    nth0(2,Board,C2), firstFreeIndexColonne(Board,C2,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,2,IndexLibre), Ligne==IndexLibre,
     nth0(3,Board,C3), nth0(Ligne,C3,P), nonvar(P),
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
     nth0(5,Board,C5), nth0(Ligne,C5,V5), P==V5,
-    ColonneAJouer=C2.
+    ColonneAJouer=2.
 gagnableLigne(Ligne, Board, P, ColonneAJouer) :- 
-    nth0(3,Board,C3), firstFreeIndexColonne(Board,C3,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,3,IndexLibre), Ligne==IndexLibre,
     nth0(4,Board,C4), nth0(Ligne,C4,P), nonvar(P),
     nth0(5,Board,C5), nth0(Ligne,C5,V5), P==V5,
     nth0(6,Board,C6), nth0(Ligne,C6,V6), P==V6,
-    ColonneAJouer=C3.
+    ColonneAJouer=3.
 
 %Le deuxième élément est vide
-
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(0,Board,C0), nth0(Ligne,C0,P), nonvar(P),
-    nth0(1,Board,C1), firstFreeIndexColonne(Board,C1,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,1,IndexLibre), Ligne==IndexLibre,
     nth0(2,Board,C2), nth0(Ligne,C2,V2), P==V2,
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
-    ColonneAJouer=C1.
+    ColonneAJouer=1.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(1,Board,C1), nth0(Ligne,C1,P), nonvar(P),
-    nth0(2,Board,C2), firstFreeIndexColonne(Board,C2,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,2,IndexLibre), Ligne==IndexLibre,
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
-    ColonneAJouer=C2.
+    ColonneAJouer=2.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(2,Board,C2), nth0(Ligne,C2,P), nonvar(P),
-    nth0(3,Board,C3), firstFreeIndexColonne(Board,C3,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,3,IndexLibre), Ligne==IndexLibre,
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
     nth0(5,Board,C5), nth0(Ligne,C5,V5), P==V5,
-    ColonneAJouer=C3.
+    ColonneAJouer=3.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(3,Board,C3), nth0(Ligne,C3,P), nonvar(P),
-    nth0(4,Board,C4), firstFreeIndexColonne(Board,C4,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,4,IndexLibre), Ligne==IndexLibre,
     nth0(5,Board,C5), nth0(Ligne,C5,V5), P==V5,
     nth0(6,Board,C6), nth0(Ligne,C6,V6), P==V6,
-    ColonneAJouer=C4.
+    ColonneAJouer=4.
 
 %Le troisième élément est vide
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(0,Board,C0), nth0(Ligne,C0,P), nonvar(P),
     nth0(1,Board,C1), nth0(Ligne,C1,V1), P==V1,
-    nth0(2,Board,C2), firstFreeIndexColonne(Board,C2,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,2,IndexLibre), Ligne==IndexLibre,
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
-    ColonneAJouer=C2.
+    ColonneAJouer=2.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(1,Board,C1), nth0(Ligne,C1,P), nonvar(P),
     nth0(2,Board,C2), nth0(Ligne,C2,V2), P==V2,
-    nth0(3,Board,C3), firstFreeIndexColonne(Board,C3,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,3,IndexLibre), Ligne==IndexLibre,
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
-    ColonneAJouer=C3.
+    ColonneAJouer=3.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(2,Board,C2), nth0(Ligne,C2,P), nonvar(P),
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
-    nth0(4,Board,C4), firstFreeIndexColonne(Board,C4,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,4,IndexLibre), Ligne==IndexLibre,
     nth0(5,Board,C5), nth0(Ligne,C5,V5), P==V5,
-    ColonneAJouer=C4.
+    ColonneAJouer=4.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(3,Board,C3), nth0(Ligne,C3,P), nonvar(P),
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
-    nth0(5,Board,C5), firstFreeIndexColonne(Board,C5,IndexLibre), Ligne==IndexLibre,
+    firstFreeIndexColonne(Board,5,IndexLibre), Ligne==IndexLibre,
     nth0(6,Board,C6), nth0(Ligne,C6,V6), P==V6,
-    ColonneAJouer=C5.
+    ColonneAJouer=5.
 
 % Le dernier élément est vide et jouable
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(0,Board,C0), nth0(Ligne,C0,P), nonvar(P),
     nth0(1,Board,C1), nth0(Ligne,C1,V1), P==V1,
     nth0(2,Board,C2), nth0(Ligne,C2,V2), P==V2,
-    nth0(3,Board,C3), firstFreeIndexColonne(Board,C3,IndexLibre), Ligne==IndexLibre,
-    ColonneAJouer=C3.
+    firstFreeIndexColonne(Board,3,IndexLibre), Ligne==IndexLibre,
+    ColonneAJouer=3.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(1,Board,C1), nth0(Ligne,C1,P), nonvar(P),
     nth0(2,Board,C2), nth0(Ligne,C2,V2), P==V2,
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
-    nth0(4,Board,C4), firstFreeIndexColonne(Board,C4,IndexLibre), Ligne==IndexLibre,
-    ColonneAJouer=C4.
+    firstFreeIndexColonne(Board,4,IndexLibre), Ligne==IndexLibre,
+    ColonneAJouer=4.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(2,Board,C2), nth0(Ligne,C2,P), nonvar(P),
     nth0(3,Board,C3), nth0(Ligne,C3,V3), P==V3,
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
-    nth0(5,Board,C5), firstFreeIndexColonne(Board,C5,IndexLibre), Ligne==IndexLibre,
-    ColonneAJouer=C5.
+    firstFreeIndexColonne(Board,5,IndexLibre), Ligne==IndexLibre,
+    ColonneAJouer=5.
 gagnableLigne(Ligne, Board, P,ColonneAJouer) :- 
     nth0(3,Board,C3), nth0(Ligne,C3,P), nonvar(P),
     nth0(4,Board,C4), nth0(Ligne,C4,V4), P==V4,
     nth0(5,Board,C5), nth0(Ligne,C5,V5), P==V5,
-    nth0(6,Board,C6), firstFreeIndexColonne(Board,C6,IndexLibre), Ligne==IndexLibre,
-    ColonneAJouer=C6.
+    firstFreeIndexColonne(Board,6,IndexLibre), Ligne==IndexLibre,
+    ColonneAJouer=6.
 
 
 
@@ -174,20 +173,22 @@ gagnableDiagonaleBH(L, C, Board, P, ColonneAJouer) :-
     C3 is C+3, L3 is L+3, firstFreeIndexColonne(Board, C3, IndexLibre), IndexLibre==L3,
     ColonneAJouer = C3.
 
-gagnable(Board, P, ColonneAJouer) :- member(ColonneAJouer, Board), gagnableColonne(ColonneAJouer, P).
+gagnable(Board, P, ColonneAJouer) :- between(0, 6, C), gagnableColonne(Board, C, ColonneAJouer, P).
 gagnable(Board, P, ColonneAJouer) :- between(0, 5, L), gagnableLigne(L, Board, P, ColonneAJouer).
 gagnable(Board, P, ColonneAJouer) :- between(3, 5, L), between(0, 3, C), gagnableDiagonaleHB(L, C, Board, P, ColonneAJouer).
 gagnable(Board, P, ColonneAJouer) :- between(0, 2, L), between(0, 3, C), gagnableDiagonaleBH(L, C, Board, P, ColonneAJouer).
 
 
 ia(Board, ColIndex, ElemIndex, Player):-
-    gagnable(Board, Player, ColIndex). % check if the AI can win in the next move
-    firstFreeIndexColonne(Board, RandCol, ElemIndex), ElemIndex\==6, !.
+    copy_term(Board, BoardCopy),
+    gagnable(BoardCopy, Player, ColIndex), % check if the AI can win in the next move
+    firstFreeIndexColonne(Board, ColIndex, ElemIndex), ElemIndex\==6, !.
 
 ia(Board, ColIndex, ElemIndex, Player):-
     changePlayer(Player, Opponent),
-    gagnable(Board, Opponent, ColIndex). % check if the AI can block in the next oponnent move
-    firstFreeIndexColonne(Board, RandCol, ElemIndex), ElemIndex\==6, !.
+    copy_term(Board, BoardCopy),
+    gagnable(BoardCopy, Opponent, ColIndex), % check if the AI can block the opponent in the next move
+    firstFreeIndexColonne(Board, ColIndex, ElemIndex), ElemIndex\==6, !.
 
 % Basic IA that plays randomly in a non-full column
 ia(Board, RandCol, ElemIndex, _):-
