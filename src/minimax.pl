@@ -28,7 +28,7 @@ utilityWin(Board,Player,Utility) :-
 utilityLoose(Board,Player,Utility) :-
 	changePlayer(Player,Opponent),
 	(winner(Board,Opponent) ->
-		Utility = -10000
+		Utility = -12000
 	;
 		Utility = 0
 	).
@@ -42,7 +42,7 @@ utilityPerdable(Board,Player,Utility) :-
 	changePlayer(Player,Opponent),
 	findall(Colone, gagnable(Board,Opponent,Colone), Colones),
 	length(Colones, N),
-	Utility is N * -500.
+	Utility is N * -11000.
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Useful predicates */
@@ -74,9 +74,9 @@ minimax(Depth,Board,Player,_,Utility) :-
 
 % Cas récursif
 minimax(Depth,Board,Player,ColIndex,Utility) :-
-    Depth2 is Depth+1,
+    Depth2 is Depth+1,     	 							% On augmente la profondeur
     possible_moves(Board,List), !,
-    best(Depth2,Board,Player,List,ColIndex,Utility), !.
+    best(Depth2,Board,Player,List,ColIndex,Utility), !. % on parcours les coups possibles avec best
 
 % Plus de coups possibles
 minimax(_,Board,Player,_,Utility) :- 
@@ -127,7 +127,9 @@ better2(_,R,_Player,ColIndex1,Utility1,_ColIndex2,_Utility2,ColIndex1,Utility1) 
 better2(_,_R,_Player,_ColIndex1,_Utility1,ColIndex2,Utility2,ColIndex2,Utility2).
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/* maximizing / minimizing */
+/* maximizing / minimizing /// Ne sert pas dans cette version de minimax car elle est implémentée dans la fonction best  en faisant utility is -utility2
+Cela permet de ne pas écrire en dure le nom de l'ia_player
+*/
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 maximizing(Player) :-
@@ -137,4 +139,4 @@ minimizing(Player) :-
     ia_player(IA),
     Player \= IA.
 
-ia_player(x).
+ia_player(x).  % Définir le joueur IA ici (x ou o)
