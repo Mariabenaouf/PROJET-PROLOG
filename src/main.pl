@@ -4,3 +4,4 @@
 :- consult(winner).
 :- consult(game).
 :- consult(ai).
+:- consult(minimax).
