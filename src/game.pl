@@ -10,3 +10,32 @@ play(Player):-write('New turn for:'), writeln(Player),
         applyIt(Board, NewBoard), % update board
         changePlayer(Player,NextPlayer), % Change the player
         play(NextPlayer). % next turn!
+
+
+
+selectIA(random, Board, Col, ElemIndex, Player) :-
+    ia(Board, Col, ElemIndex, Player).
+
+selectIA(minimax, Board, Col, ElemIndex, Player) :-
+    ia_minimax(Board, Col, ElemIndex, Player).
+
+ia_minimax(Board, ColIndex, ElemIndex, Player) :-
+    ia_player(Player),
+    minimax(0, Board, Player, ColIndex, _Utility),
+    firstFreeIndexColonne(Board, ColIndex, ElemIndex).
+
+%%%Pour faire s'affronter deux IA
+
+play2(_, _, _) :- gameover(Winner), !,
+    write('Game Over. Winner: '), writeln(Winner),
+    displayBoard.
+
+play2(Player, IAType, NextIAType) :-
+    write('New turn for: '), writeln(Player), write('Using IA type: '), writeln(IAType),
+    board(Board),
+    displayBoard,
+    selectIA(IAType, Board, Col, ElemIndex, Player),
+    playMove(Board, Col, ElemIndex, NewBoard, Player),
+    applyIt(Board, NewBoard),
+    changePlayer(Player, NextPlayer),
+    play2(NextPlayer, NextIAType, IAType).  % switch IA type for next turn
