@@ -1,4 +1,4 @@
-:- module(test_game, []).
+:- module(test_minimax, []).
 
 :- use_module(library(plunit)).
 

@@ -1,5 +1,5 @@
 
-:- module(test_game, []).
+:- module(test_winner, []).
 
 :- use_module(library(plunit)).
 % Import des modules du projet
