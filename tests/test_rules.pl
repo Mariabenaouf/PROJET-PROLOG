@@ -1,4 +1,7 @@
-:- consult('../src/rules.pl').
+:- module(test_rules, []).
+
+:- use_module(library(plunit)).
+:- use_module('../src/rules').
 
 :- begin_tests(rules).
 

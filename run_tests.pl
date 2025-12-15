@@ -1,24 +1,30 @@
-:- initialization(main,main).
+:- module(main, [main/0]).
 
+% Charger les modules du projet
+:- use_module(src/board).
+:- use_module(src/display).
+:- use_module(src/rules).
+:- use_module(src/winner).
+:- use_module(src/ai).
+:- use_module(src/minimax).
+:- use_module(src/game).
+
+% Charger la librairie de tests
+:- use_module(library(plunit)).
+
+% Charger les tests
+:- use_module(tests/test_board).
+:- use_module(tests/test_winner).
+:- use_module(tests/test_rules).
+:- use_module(tests/test_minimax).
+:- use_module(tests/test_game).
+:- use_module(tests/test_display).
+:- use_module(tests/test_ai).
+
+% Pour le CI
 main :-
-    % Charger les fichiers du code source
-    consult('src/minimax.pl'),
-    consult('src/board.pl'),
-    consult('src/display.pl'),
-    consult('src/rules.pl'),
-    consult('src/winner.pl'),
-    consult('src/game.pl'),
-
-    % Charger les fichiers de tests
-    consult('tests/test_board.pl'),
-    consult('tests/test_winner.pl'),
-    consult('tests/test_rules.pl'),
-    consult('tests/test_minimax.pl'),   
-    consult('tests/test_game.pl'),
-    consult('tests/test_display.pl'),
-    consult('tests/test_ai.pl'),
-
-    % Lancer les tests
     run_tests,
-
     halt.
+
+% Lancer automatiquement
+:- initialization(main, main).

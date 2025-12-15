@@ -1,5 +1,10 @@
-:- consult('../src/minimax.pl').
-:- consult('../src/winner.pl').
+:- module(test_game, []).
+
+:- use_module(library(plunit)).
+
+% Import des modules du projet
+:- use_module('../src/winner').
+:- use_module('../src/minimax').
 
 :- begin_tests(minimax).
 
