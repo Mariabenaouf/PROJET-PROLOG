@@ -1,3 +1,7 @@
+:- module(minimax, [
+    minimax/5,
+	ia_player/1
+]).
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Move */
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -112,10 +116,10 @@ best(Depth,Board,Player,[ColIndex1|Other_Moves],ColIndex,Utility) :-
 better(_,_Player,ColIndex1,Utility1,_ColIndex2,Utility2,ColIndex1,Utility1) :-
 	Utility1 > Utility2, !.
 
-better(_,_Player,ColIndex1,Utility1,ColIndex2,Utility2,ColIndex,Utility) :-
+better(_,Player,ColIndex1,Utility1,ColIndex2,Utility2,ColIndex,Utility) :-
 	Utility1 == Utility2,
 	random_between(1,10,R),
-	better2(_,R,_Player,ColIndex1,Utility1,ColIndex2,Utility2,ColIndex,Utility), !.
+	better2(_,R,Player,ColIndex1,Utility1,ColIndex2,Utility2,ColIndex,Utility), !.
 
 better(_,_Player,_ColIndex1,_Utility1,ColIndex2,Utility2,ColIndex2,Utility2).
 
