@@ -1,6 +1,11 @@
-:- consult('../src/board.pl').
-:- consult('../src/game.pl').
-:- consult('../src/rules.pl').
+:- module(test_game, []).
+
+:- use_module(library(plunit)).
+
+% Import des modules du projet
+:- use_module('../src/board').
+:- use_module('../src/game').
+:- use_module('../src/rules').
 
 :- begin_tests(game).
 

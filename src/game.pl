@@ -1,3 +1,13 @@
+:- module(game, [
+    play/1,
+    play2/3
+]).
+:- use_module(board).
+:- use_module(display).
+:- use_module(ai).
+:- use_module(minimax).
+:- use_module(rules).
+:- use_module(winner).
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Main game loop */
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -14,7 +24,7 @@ play(Player):-write('New turn for:'), writeln(Player),
 
 
 selectIA(random, Board, Col, ElemIndex, Player) :-
-    ia(Board, Col, ElemIndex, Player).
+    ia2(Board, Col, ElemIndex, Player).
 
 selectIA(minimax, Board, Col, ElemIndex, Player) :-
     ia_minimax(Board, Col, ElemIndex, Player).

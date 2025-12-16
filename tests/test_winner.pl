@@ -1,6 +1,10 @@
 
-:- consult('../src/board.pl').
-:- consult('../src/winner.pl').
+:- module(test_game, []).
+
+:- use_module(library(plunit)).
+% Import des modules du projet
+:- use_module('../src/board').
+:- use_module('../src/winner').
 
 :- begin_tests(winner).
 
