@@ -7,4 +7,4 @@
 :- use_module(src/minimax).
 
 %%%%% Start the game!
-:- initialization(init).
+:- initialization(start).

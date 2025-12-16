@@ -18,5 +18,4 @@ init :-
     length(Col6,6),
     length(Col7,6),
     Board = [Col1,Col2,Col3,Col4,Col5,Col6,Col7],
-    assert(board(Board)),
-    play2('x', minimax, random).  % 'x' = minimax, 'o' = random
+    assert(board(Board)).

@@ -8,7 +8,7 @@
 % Print the value of the board at index N (?, x or o) 
 printVal(C, N) :- 
     board(B), nth0(C,B,Colonne), nth0(N,Colonne,Val),   % récupère l'élément à l'indice C,N
-    var(Val), write('?'), write(' '), !.                % si c'est pas instancié, affiche '?' et ne fais pas la clause suivante
+    var(Val), write('? '), !.                % si c'est pas instancié, affiche '?' et ne fais pas la clause suivante
 
 printVal(C, N) :- board(B), nth0(C,B,Colonne), nth0(N,Colonne,Val), write(Val), write(' '). %  récupère l'élément à l'indice C,N et l'affiche
    
