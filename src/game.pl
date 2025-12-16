@@ -2,7 +2,8 @@
     start/0,
     play/1,
     play2/3, 
-    selectIA/5
+    selectIA/5,
+    ia_minimax/4
 ]).
 
 :- dynamic mode/1.

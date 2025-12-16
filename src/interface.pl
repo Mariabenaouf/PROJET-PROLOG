@@ -5,6 +5,7 @@
 :- use_module(board).
 :- use_module(game).
 :- use_module(ai).
+:- use_module(minimax).
 
 :- dynamic current_player/1.
 :- dynamic game_window/1.
@@ -14,7 +15,7 @@
 /* Menu principal */
 start_menu :-
     new(MenuWindow, dialog('PUISSANCE 4 - Menu')),
-    send(MenuWindow, size, size(400, 250)),
+    send(MenuWindow, size, size(600, 505)),
     
     new(Btn1, button('Humain vs IA', 
                      message(@prolog, start_mode, 1, MenuWindow))),
@@ -27,6 +28,10 @@ start_menu :-
     new(Btn3, button('IA Minimax vs IA Random', 
                      message(@prolog, start_mode, 3, MenuWindow))),
     send(MenuWindow, append, Btn3),
+
+    new(Btn4, button('Humain vs Humain', 
+                     message(@prolog, start_mode, 4, MenuWindow))),
+    send(MenuWindow, append, Btn4),
     
     send(MenuWindow, open_centered).
 
@@ -50,8 +55,14 @@ start_mode(3, MenuWindow) :-
     retractall(game_mode(_)),
     retractall(ia_types(_, _)),
     assert(game_mode(ia_vs_ia)),
-    assert(ia_types(minimax, random)),
+    assert(ia_types(random, minimax)),
     start_interface_ia_vs_ia.
+
+start_mode(4, MenuWindow) :-
+    send(MenuWindow, destroy),
+    retractall(game_mode(_)),
+    assert(game_mode(human_vs_human)),
+    start_interface_human_vs_human.
 
 /* Démarre l'interface Humain vs IA */
 start_interface :-
@@ -77,6 +88,18 @@ start_interface_ia_vs_ia :-
     draw_board(Window),
     send(Window, open),
     ia_turn_auto('x').
+
+/* Démarre l'interface Humain vs Humain */
+start_interface_human_vs_human :-
+    board:init,
+    retractall(current_player(_)),
+    assert(current_player('x')),
+    new(Window, dialog('PUISSANCE 4 - Humain vs Humain')),
+    send(Window, size, size(600, 505)),
+    retractall(game_window(_)),
+    assert(game_window(Window)),
+    draw_board(Window),
+    send(Window, open).
 
 /* Dessine le plateau */
 draw_board(Window) :-
@@ -142,9 +165,9 @@ ia_turn :-
     game:gameover(_), !.
 
 ia_turn :-
-    sleep(0.5),
+    sleep(1),
     board:board(Board),
-    ai:selectIA(random, Board, Col, RowIndex, 'o'),
+    game:selectIA(minimax, Board, Col, RowIndex, 'o'),
     game:playMove(Board, Col, RowIndex, NewBoard, 'o'),
     board:applyIt(Board, NewBoard),
     draw_board_game,
@@ -165,7 +188,7 @@ ia_turn_auto(Player) :-
     board:board(Board),
     ia_types(IA1, IA2),
     ( Player == 'x' -> IAType = IA1 ; IAType = IA2 ),
-    ai:selectIA(IAType, Board, Col, RowIndex, Player),
+    game:selectIA(IAType, Board, Col, RowIndex, Player),
     game:playMove(Board, Col, RowIndex, NewBoard, Player),
     board:applyIt(Board, NewBoard),
     draw_board_game,

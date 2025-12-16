@@ -1,6 +1,7 @@
 :- module(minimax, [
     minimax/5,
 	ia_player/1
+	
 ]).
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Move */
@@ -71,7 +72,7 @@ possible_moves(Board, List) :-
 minimax(_,Board,_,4,0) :-
     isBoardEmpty(Board), !.
 
-% Si quelqu'un a gagné ou profondeur max atteinte
+/* Si quelquun a gagné ou profondeur max atteinte */
 minimax(Depth,Board,Player,_,Utility) :- 
     (Depth >= 4 ; winner(Board, _)),
     utility(Board,Player,Utility), !.
@@ -141,4 +142,4 @@ minimizing(Player) :-
     ia_player(IA),
     Player \= IA.
 
-ia_player(x).
+ia_player('o').
