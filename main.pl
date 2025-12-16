@@ -5,6 +5,7 @@
 :- use_module(src/winner).
 :- use_module(src/ai).
 :- use_module(src/minimax).
+:- use_module(src/interface).
 
 %%%%% Start the game!
-:- initialization(start).
+:- initialization(ui:start_interface).

@@ -88,7 +88,7 @@ ia_minimax(Board, ColIndex, ElemIndex, Player) :-
     minimax(0, Board, Player, ColIndex, _Utility),
     firstFreeIndexColonne(Board, ColIndex, ElemIndex).
 
-%%%Pour faire s'affronter deux IA
+/*Pour faire s'affronter deux IA*/
 
 play2(_, _, _) :- gameover(Winner), !,
     write('Game Over. Winner: '), writeln(Winner),
