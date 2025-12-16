@@ -33,7 +33,7 @@ start_mode(2) :-
 
 start_mode(3) :-
     writeln('Mode : IA vs IA (minimax vs random) '),
-    play2('x', minimax, random).  % exemple, modifiable
+    play2('x', random,minimax).
 
 start_mode(_) :-
     writeln('Choix invalide.'),
