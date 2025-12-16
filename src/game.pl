@@ -1,7 +1,8 @@
 :- module(game, [
     start/0,
     play/1,
-    play2/3
+    play2/3, 
+    selectIA/5
 ]).
 
 :- dynamic mode/1.

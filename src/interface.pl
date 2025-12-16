@@ -1,4 +1,4 @@
-:- module(ui, [start_interface/0, cell_clicked/1]).
+:- module(ui, [start_menu/0]).
 
 :- use_module(library(pce)).
 
@@ -8,22 +8,80 @@
 
 :- dynamic current_player/1.
 :- dynamic game_window/1.
+:- dynamic game_mode/1.
+:- dynamic ia_types/2.
 
-/* Démarre l'interface */
+/* Menu principal */
+start_menu :-
+    new(MenuWindow, dialog('PUISSANCE 4 - Menu')),
+    send(MenuWindow, size, size(400, 250)),
+    
+    new(Btn1, button('Humain vs IA', 
+                     message(@prolog, start_mode, 1, MenuWindow))),
+    send(MenuWindow, append, Btn1),
+    
+    new(Btn2, button('IA Random vs IA Random', 
+                     message(@prolog, start_mode, 2, MenuWindow))),
+    send(MenuWindow, append, Btn2),
+    
+    new(Btn3, button('IA Minimax vs IA Random', 
+                     message(@prolog, start_mode, 3, MenuWindow))),
+    send(MenuWindow, append, Btn3),
+    
+    send(MenuWindow, open_centered).
+
+/* Démarrage selon le mode */
+start_mode(1, MenuWindow) :-
+    send(MenuWindow, destroy),
+    retractall(game_mode(_)),
+    assert(game_mode(human_vs_ia)),
+    start_interface.
+
+start_mode(2, MenuWindow) :-
+    send(MenuWindow, destroy),
+    retractall(game_mode(_)),
+    retractall(ia_types(_, _)),
+    assert(game_mode(ia_vs_ia)),
+    assert(ia_types(random, random)),
+    start_interface_ia_vs_ia.
+
+start_mode(3, MenuWindow) :-
+    send(MenuWindow, destroy),
+    retractall(game_mode(_)),
+    retractall(ia_types(_, _)),
+    assert(game_mode(ia_vs_ia)),
+    assert(ia_types(minimax, random)),
+    start_interface_ia_vs_ia.
+
+/* Démarre l'interface Humain vs IA */
 start_interface :-
-    board:init,                       % Initialise le plateau via module board
+    board:init,
     retractall(current_player(_)),
-    assert(current_player('x')),            % joueur 'x' commence
-    new(Window, dialog('PUISSANCE 4')),
+    assert(current_player('x')),
+    new(Window, dialog('PUISSANCE 4 - Humain vs IA')),
     send(Window, size, size(600, 505)),
     retractall(game_window(_)),
     assert(game_window(Window)),
     draw_board(Window),
     send(Window, open).
 
+/* Démarre l'interface IA vs IA */
+start_interface_ia_vs_ia :-
+    board:init,
+    retractall(current_player(_)),
+    assert(current_player('x')),
+    new(Window, dialog('PUISSANCE 4 - IA vs IA')),
+    send(Window, size, size(600, 505)),
+    retractall(game_window(_)),
+    assert(game_window(Window)),
+    draw_board(Window),
+    send(Window, open),
+    ia_turn_auto('x').
+
 /* Dessine le plateau */
 draw_board(Window) :-
     board:board(Board),
+    send(Window, clear),
     send(Window, background, colour('#0044FF')),
     forall(between(0,6,Col),
         draw_column(Window, Col, Board)
@@ -44,17 +102,19 @@ draw_column(Window, ColIndex, Board) :-
             new(Circle, ellipse(70,70)),
             send(Circle, fill_pattern, colour(Color)),
             send(Window, display, Circle, point(X-25,Y-25)),
-            send(Circle, recogniser,
-                click_gesture(left, '', single,
-                    message(@prolog, cell_clicked,ColIndex)))
-
+            % Ajouter le clic seulement en mode Humain vs IA
+            ( game_mode(human_vs_ia) ->
+                send(Circle, recogniser,
+                    click_gesture(left, '', single,
+                        message(@prolog, cell_clicked, ColIndex)))
+            ; true )
         )
     ).
 
 cell_clicked(_) :-
     game:gameover(_), !.
 
-/* Gestion du clic d'un joueur */
+/* Gestion du clic (Humain vs IA) */
 cell_clicked(ColIndex) :-
     board:board(Board),
     board:firstFreeIndexColonne(Board, ColIndex, RowIndex),
@@ -66,33 +126,52 @@ cell_clicked(ColIndex) :-
     ( game:gameover(Winner) ->
         format('Game over! Winner: ~w~n', [Winner]), !
     ;
-        % changer de joueur
         changePlayer(Player, NextPlayer),
         retractall(current_player(_)),
         assert(current_player(NextPlayer)),
         (NextPlayer == 'o' -> ia_turn ; true)
     ).
 
-% Redessine le plateau
+/* Redessine le plateau */
 draw_board_game :-
     game_window(Window),
     draw_board(Window).
 
-/* Tour de l'IA */
+/* Tour de l'IA (Humain vs IA) */
 ia_turn :-
+    game:gameover(_), !.
+
+ia_turn :-
+    sleep(0.5),
     board:board(Board),
     ai:selectIA(random, Board, Col, RowIndex, 'o'),
     game:playMove(Board, Col, RowIndex, NewBoard, 'o'),
     board:applyIt(Board, NewBoard),
+    draw_board_game,
     ( game:gameover(Winner) ->
         format('Game over! Winner: ~w~n', [Winner])
     ;
         retractall(current_player(_)),
-        assert(current_player('x')),
-        draw_board_game
+        assert(current_player('x'))
     ).
 
-% Changement de joueur
+/* Tour automatique (IA vs IA) */
+ia_turn_auto(_) :-
+    game:gameover(Winner), !,
+    format('Game over! Winner: ~w~n', [Winner]).
+
+ia_turn_auto(Player) :-
+    sleep(1),
+    board:board(Board),
+    ia_types(IA1, IA2),
+    ( Player == 'x' -> IAType = IA1 ; IAType = IA2 ),
+    ai:selectIA(IAType, Board, Col, RowIndex, Player),
+    game:playMove(Board, Col, RowIndex, NewBoard, Player),
+    board:applyIt(Board, NewBoard),
+    draw_board_game,
+    changePlayer(Player, NextPlayer),
+    ia_turn_auto(NextPlayer).
+
+/* Changement de joueur */
 changePlayer('x', 'o').
 changePlayer('o', 'x').
-
