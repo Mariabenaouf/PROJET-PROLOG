@@ -29,11 +29,11 @@ start_mode(1) :-
 
 start_mode(2) :-
     writeln('Mode : IA vs IA (IA Random)'),
-    play('x').   % leur play/1 original
+    play('x').   
 
 start_mode(3) :-
     writeln('Mode : IA vs IA (minimax vs random) '),
-    play2('x', random,minimax).
+    play2('x', randomplus,minimax).
 
 start_mode(_) :-
     writeln('Choix invalide.'),
@@ -60,7 +60,7 @@ play_human_ai('o') :-
     write('New turn for: AI'), nl,
     board(Board),
     displayBoard,
-    ia1(Board, Col, ElemIndex, 'o'),
+    selectIA(random, Board, Col, ElemIndex, 'o'),
     playMove(Board, Col, ElemIndex, NewBoard, 'o'),
     applyIt(Board, NewBoard),
     play_human_ai('x').
@@ -71,7 +71,7 @@ play(_) :- gameover(Winner), !, write('Game is Over. Winner: '), writeln(Winner)
 play(Player):-write('New turn for:'), writeln(Player),
         board(Board), % instanciate the board from the knowledge base
         displayBoard, % print it
-        ia2(Board, Col, ElemIndex, Player), % ask the AI for a move
+        selectIA(randomplus, Board, Col, ElemIndex, Player), % ask the AI for a move
         playMove(Board, Col, ElemIndex, NewBoard, Player), % Play the move
         applyIt(Board, NewBoard), % update board
         changePlayer(Player,NextPlayer), % Change the player
@@ -84,6 +84,9 @@ selectIA(random, Board, Col, ElemIndex, Player) :-
 
 selectIA(minimax, Board, Col, ElemIndex, Player) :-
     ia_minimax(Board, Col, ElemIndex, Player).
+
+selectIA(randomplus, Board, Col, ElemIndex, Player) :-
+    ia2(Board, Col, ElemIndex, Player).
 
 ia_minimax(Board, ColIndex, ElemIndex, Player) :-
     ia_player(Player),

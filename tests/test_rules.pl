@@ -16,6 +16,28 @@
 % Début du groupe de tests nommé "rules".
 
 % -------------------------------------------------------------------
+% TEST 1 : firstFreeIndexColonne/3
+% -------------------------------------------------------------------
+test(first_free_index) :-
+    % On construit un plateau :
+    % Dans la colonne 0 : [x, o, _, _, _, _]
+    % Donc les index 0 et 1 sont occupés,
+    % et la première case libre est à l'index 2.
+    C0 = [x,o,_,_,_,_],
+
+    % Les autres colonnes sont vides (6 cases libres)
+    length(C1,6), length(C2,6), length(C3,6),
+    length(C4,6), length(C5,6), length(C6,6),
+
+    Board = [C0,C1,C2,C3,C4,C5,C6],
+
+    % On demande la première case libre dans la colonne 0
+    firstFreeIndexColonne(Board, 0, Index),
+
+    % On vérifie que l'index retourné est bien 2
+    assertion(Index == 2).
+
+% -------------------------------------------------------------------
 % TEST 1 : replace_nth0/5
 % -------------------------------------------------------------------
 % Objectif :

@@ -16,7 +16,7 @@
 % - possible_moves/2
 % - minimax/5 (pas testé directement ici)
 
-:- use_module('../src/ai').
+:- use_module('../src/rules').
 % Contient firstFreeIndexColonne/3, utilisé par minimax
 
 :- begin_tests(minimax).

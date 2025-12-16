@@ -8,4 +8,5 @@
 :- use_module(src/interface).
 
 %%%%% Start the game!
-:- initialization(ui:start_menu).
+:- initialization(start).
+%:- initialization(ui:start_menu).
