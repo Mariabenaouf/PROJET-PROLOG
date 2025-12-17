@@ -89,7 +89,6 @@ selectIA(randomplus, Board, Col, ElemIndex, Player) :-
     ia2(Board, Col, ElemIndex, Player).
 
 ia_minimax(Board, ColIndex, ElemIndex, Player) :-
-    ia_player(Player),
     minimax(0, Board, Player, ColIndex, _Utility),
     firstFreeIndexColonne(Board, ColIndex, ElemIndex).
 

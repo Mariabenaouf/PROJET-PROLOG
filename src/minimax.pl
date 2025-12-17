@@ -1,6 +1,5 @@
 :- module(minimax, [
-    minimax/5,
-	ia_player/1
+    minimax/5
 	
 ]).
 :- use_module(winner).
@@ -138,11 +137,4 @@ better2(_,_R,_Player,_ColIndex1,_Utility1,ColIndex2,Utility2,ColIndex2,Utility2)
 /* maximizing / minimizing */
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-maximizing(Player) :-
-    ia_player(Player).
 
-minimizing(Player) :-
-    ia_player(IA),
-    Player \= IA.
-
-ia_player('o').
