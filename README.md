@@ -89,7 +89,7 @@ Choisissez le mode de jeu :
 3 - IA vs IA (minimax vs random)
 ```
 
-Cela correspond aux différentes fonctionnalitées implémentées et décrites plus haut. Choisissez en écrivant, par exemple : `1.`, ilne faut pas oublier le point pour que Prolog comprenne la commande.
+Cela correspond aux différentes fonctionnalitées implémentées et décrites plus haut. Choisissez en écrivant, par exemple : `1.`, il ne faut pas oublier le point pour que Prolog comprenne la commande.
 
 De même lorsque vous jouez une partie contre une IA, ajoutez un point après le numéro de commande.
 
